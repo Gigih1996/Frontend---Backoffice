@@ -1,5 +1,4 @@
-// components/notification/notification.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../services/notification.service';
 import { Notification } from '../../../models/employee.model';
@@ -13,11 +12,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent implements OnInit, OnDestroy {
+  private notificationService = inject(NotificationService);
+
   notifications: Notification[] = [];
   private subscription!: Subscription;
-  private animationTimeouts: { [key: string]: any } = {};
-
-  constructor(private notificationService: NotificationService) { }
+  private animationTimeouts: Record<string, NodeJS.Timeout> = {};
 
   ngOnInit(): void {
     this.subscription = this.notificationService.notifications$.subscribe(
@@ -93,7 +92,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   getNotificationIcon(type: string): string {
-    const icons: { [key: string]: string } = {
+    const icons: Record<string, string> = {
       'success': 'bi-check-circle-fill',
       'error': 'bi-x-circle-fill',
       'warning': 'bi-exclamation-triangle-fill',
@@ -103,7 +102,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   getNotificationClass(type: string): string {
-    const classes: { [key: string]: string } = {
+    const classes: Record<string, string> = {
       'success': 'notification-success',
       'error': 'notification-error',
       'warning': 'notification-warning',
@@ -113,7 +112,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   getNotificationTitle(type: string): string {
-    const titles: { [key: string]: string } = {
+    const titles: Record<string, string> = {
       'success': 'Success',
       'error': 'Error',
       'warning': 'Warning',
@@ -122,12 +121,12 @@ export class NotificationComponent implements OnInit, OnDestroy {
     return titles[type] || 'Notification';
   }
 
-  pauseAutoRemoval(notification: Notification): void {
+  pauseAutoRemoval(): void {
     // This would pause the auto-removal timer if we implemented that feature
     // For now, it's a placeholder for future enhancement
   }
 
-  resumeAutoRemoval(notification: Notification): void {
+  resumeAutoRemoval(): void {
     // This would resume the auto-removal timer if we implemented that feature
     // For now, it's a placeholder for future enhancement
   }
@@ -136,6 +135,14 @@ export class NotificationComponent implements OnInit, OnDestroy {
     // Handle notification click - could navigate or perform actions
     // For now, just remove the notification
     this.removeNotification(notification.id);
+  }
+
+  // Handle keyboard events for accessibility
+  onNotificationKeydown(event: KeyboardEvent, notification: Notification): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.onNotificationClick(notification);
+    }
   }
 
   // Tracking method for ngFor performance

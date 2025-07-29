@@ -10,7 +10,9 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-2">
                                     <li class="breadcrumb-item">
-                                        <a (click)="onCancel()" class="text-decoration-none">
+                                        <a (click)="onCancel()" (keydown.enter)="onCancel()"
+                                            (keydown.space)="onCancel()" tabindex="0" role="button"
+                                            class="text-decoration-none">
                                             <i class="bi bi-people-fill me-1"></i>Employees
                                         </a>
                                     </li>
@@ -53,7 +55,8 @@
                             <div class="steps d-flex justify-content-between align-items-center">
 
                                 <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1"
-                                    (click)="goToStep(1)">
+                                    (click)="goToStep(1)" (keydown.enter)="goToStep(1)" (keydown.space)="goToStep(1)"
+                                    tabindex="0" role="button">
                                     <div class="step-icon">
                                         <i class="bi bi-person-fill" *ngIf="currentStep <= 1"></i>
                                         <i class="bi bi-check-lg" *ngIf="currentStep > 1"></i>
@@ -67,7 +70,8 @@
                                 <div class="step-connector" [class.active]="currentStep > 1"></div>
 
                                 <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2"
-                                    (click)="goToStep(2)">
+                                    (click)="goToStep(2)" (keydown.enter)="goToStep(2)" (keydown.space)="goToStep(2)"
+                                    tabindex="0" role="button">
                                     <div class="step-icon">
                                         <i class="bi bi-briefcase-fill" *ngIf="currentStep <= 2"></i>
                                         <i class="bi bi-check-lg" *ngIf="currentStep > 2"></i>
@@ -81,7 +85,8 @@
                                 <div class="step-connector" [class.active]="currentStep > 2"></div>
 
                                 <div class="step" [class.active]="currentStep >= 3" [class.completed]="currentStep > 3"
-                                    (click)="goToStep(3)">
+                                    (click)="goToStep(3)" (keydown.enter)="goToStep(3)" (keydown.space)="goToStep(3)"
+                                    tabindex="0" role="button">
                                     <div class="step-icon">
                                         <i class="bi bi-card-text" *ngIf="currentStep <= 3"></i>
                                         <i class="bi bi-check-lg" *ngIf="currentStep > 3"></i>

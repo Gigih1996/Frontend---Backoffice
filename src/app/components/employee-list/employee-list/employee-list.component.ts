@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,6 +17,10 @@ import { Employee, SearchCriteria, SortConfig, PaginationConfig } from '../../..
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit {
+  private employeeService = inject(EmployeeService);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+
   employees: Employee[] = [];
   displayedEmployees: Employee[] = [];
   totalCount = 0;
@@ -50,12 +54,6 @@ export class EmployeeListComponent implements OnInit {
   // Filter options
   statusOptions = ['All', 'Active', 'Inactive', 'Pending', 'Suspended'];
   groupOptions = ['All'];
-
-  constructor(
-    private employeeService: EmployeeService,
-    private notificationService: NotificationService,
-    private router: Router
-  ) { }
 
   ngOnInit(): void {
     this.loadGroupOptions();
@@ -195,7 +193,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   getStatusBadgeClass(status: string): string {
-    const statusClasses: { [key: string]: string } = {
+    const statusClasses: Record<string, string> = {
       'Active': 'bg-success',
       'Inactive': 'bg-danger',
       'Pending': 'bg-warning',
@@ -205,7 +203,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   getStatusIcon(status: string): string {
-    const statusIcons: { [key: string]: string } = {
+    const statusIcons: Record<string, string> = {
       'Active': 'bi-check-circle-fill',
       'Inactive': 'bi-x-circle-fill',
       'Pending': 'bi-clock-fill',
@@ -237,7 +235,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   // Bulk operations
-  selectedEmployees: Set<string> = new Set();
+  selectedEmployees = new Set<string>();
   selectAll = false;
 
   onSelectAll(): void {
@@ -280,5 +278,13 @@ export class EmployeeListComponent implements OnInit {
   getLastItemIndex(): number {
     const endIndex = this.paginationConfig.currentPage * this.paginationConfig.itemsPerPage;
     return endIndex > this.totalCount ? this.totalCount : endIndex;
+  }
+
+  // Keyboard event handlers for accessibility
+  onEmployeeKeydown(event: KeyboardEvent, employee: Employee): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.onViewEmployee(employee);
+    }
   }
 }

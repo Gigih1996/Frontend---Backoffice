@@ -1,5 +1,4 @@
-// components/sidebar/sidebar.component.ts
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -22,6 +21,10 @@ interface MenuItem {
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   @Output() sidebarToggle = new EventEmitter<boolean>();
 
   collapsed = false;
@@ -65,11 +68,7 @@ export class SidebarComponent implements OnInit {
     avatar: 'AU'
   };
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.checkMobile();
     window.addEventListener('resize', () => this.checkMobile());
   }

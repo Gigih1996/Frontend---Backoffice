@@ -1,5 +1,4 @@
-// app.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar/sidebar.component';
@@ -19,11 +18,11 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  private authService = inject(AuthService);
+
   title = 'employee-management';
   isLoggedIn = false;
   sidebarCollapsed = false;
-
-  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(

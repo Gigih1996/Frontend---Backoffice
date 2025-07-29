@@ -1,5 +1,4 @@
-// components/login/login.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,21 +17,19 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   loginForm!: FormGroup;
   isLoading = false;
   showPassword = false;
   animationState = 'initial';
 
   // Background animation particles
-  particles: Array<{ x: number, y: number, size: number, speed: number }> = [];
-  private animationFrame: number = 0;
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private notificationService: NotificationService
-  ) { }
+  particles: { x: number, y: number, size: number, speed: number }[] = [];
+  private animationFrame = 0;
 
   ngOnInit(): void {
     this.initializeForm();
@@ -191,7 +188,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getFieldDisplayName(fieldName: string): string {
-    const displayNames: { [key: string]: string } = {
+    const displayNames: Record<string, string> = {
       username: 'Username',
       password: 'Password'
     };

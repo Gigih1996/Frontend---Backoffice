@@ -197,3 +197,80 @@
         background: rgba(255, 255, 255, 0.1);
     }
 }
+
+/* Reset button styles for brand title */
+.brand-title {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+
+    /* Keep your existing h1 styles */
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.brand-title:hover {
+    opacity: 0.8;
+}
+
+.brand-title:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Reset button styles for nav links */
+.nav-link {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+
+    /* Add your existing nav-link styles here */
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Ensure logout button inherits nav-link styles but can have different colors */
+.logout-button {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.logout-button:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.logout-button:focus {
+    outline: 2px solid #dc3545;
+    outline-offset: 2px;
+}

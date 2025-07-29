@@ -9,7 +9,7 @@ export class NotificationService {
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   public notifications$ = this.notificationsSubject.asObservable();
 
-  showNotification(message: string, type: 'success' | 'error' | 'warning' | 'info', duration: number = 5000): void {
+  showNotification(message: string, type: 'success' | 'error' | 'warning' | 'info', duration = 5000): void {
     const notification: Notification = {
       id: Date.now().toString(),
       message,

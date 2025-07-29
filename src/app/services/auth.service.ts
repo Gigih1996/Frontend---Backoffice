@@ -1,12 +1,16 @@
 import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private router = inject(Router);
+
+  private isLoggedInSubject = new BehaviorSubject<boolean>(
+    localStorage.getItem('isLoggedIn') === 'true'
+  );
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   // Hardcoded credentials for demo
@@ -14,12 +18,6 @@ export class AuthService {
     username: 'admin',
     password: 'password123'
   };
-
-  constructor(private router: Router) {
-    // Check if user is already logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    this.isLoggedInSubject.next(isLoggedIn);
-  }
 
   login(username: string, password: string): boolean {
     if (username === this.validCredentials.username &&

@@ -1,5 +1,7 @@
 <!-- Mobile Overlay -->
-<div class="mobile-overlay" *ngIf="isMobile && mobileMenuOpen" (click)="closeMobileMenu()">
+<div class="mobile-overlay" *ngIf="isMobile && mobileMenuOpen" (click)="closeMobileMenu()"
+    (keydown.enter)="closeMobileMenu()" (keydown.space)="closeMobileMenu()" tabindex="0" role="button"
+    aria-label="Close mobile menu">
 </div>
 
 <!-- Sidebar -->
@@ -52,16 +54,14 @@
         <ul class="nav flex-column">
             <li class="nav-item" *ngFor="let item of menuItems">
                 <a class="nav-link" [class]="getMenuItemClass(item)" (click)="navigateTo(item.route)"
-                    [title]="collapsed && !isMobile ? item.title : ''">
-
+                    (keydown.enter)="navigateTo(item.route)" (keydown.space)="navigateTo(item.route)" tabindex="0"
+                    role="button" [title]="collapsed && !isMobile ? item.title : ''" aria-label="{{ item.title }}">
                     <div class="menu-icon">
                         <i class="bi" [class]="item.icon"></i>
                     </div>
-
                     <span class="menu-title" *ngIf="!collapsed || isMobile">
                         {{ item.title }}
                     </span>
-
                     <span class="badge bg-warning badge-pill ms-auto" *ngIf="item.badge && (!collapsed || isMobile)">
                         {{ item.badge }}
                     </span>

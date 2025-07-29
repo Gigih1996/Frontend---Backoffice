@@ -56,7 +56,8 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-2">
                                         <li class="breadcrumb-item">
-                                            <a (click)="onBack()" class="text-decoration-none">
+                                            <a class="text-decoration-none" role="button" tabindex="0"
+                                                (click)="onBack()" (keyup.enter)="onBack()" (keydown.enter)="onBack()">
                                                 <i class="bi bi-people-fill me-1"></i>Employees
                                             </a>
                                         </li>
@@ -78,21 +79,33 @@
                                         <i class="bi bi-three-dots me-2"></i>Actions
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" (click)="onEdit()">
+                                        <li>
+                                            <button type="button" class="dropdown-item" (click)="onEdit()"
+                                                (keyup.enter)="onEdit()" tabindex="0">
                                                 <i class="bi bi-pencil me-2"></i>Edit Employee
-                                            </a></li>
-                                        <li><a class="dropdown-item" (click)="onPrint()">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="dropdown-item" (click)="onPrint()"
+                                                (keyup.enter)="onPrint()" tabindex="0">
                                                 <i class="bi bi-printer me-2"></i>Print Details
-                                            </a></li>
-                                        <li><a class="dropdown-item" (click)="onExport()">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="dropdown-item" (click)="onExport()"
+                                                (keyup.enter)="onExport()" tabindex="0">
                                                 <i class="bi bi-download me-2"></i>Export Data
-                                            </a></li>
+                                            </button>
+                                        </li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item text-danger" (click)="onDelete()">
+                                        <li>
+                                            <button type="button" class="dropdown-item text-danger" (click)="onDelete()"
+                                                (keyup.enter)="onDelete()" tabindex="0">
                                                 <i class="bi bi-trash me-2"></i>Delete Employee
-                                            </a></li>
+                                            </button>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
@@ -14,13 +14,11 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  isMenuOpen = false;
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private notificationService: NotificationService
-  ) { }
+  isMenuOpen = false;
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -39,5 +37,13 @@ export class HeaderComponent {
   navigateToAddEmployee(): void {
     this.router.navigate(['/employees/add']);
     this.isMenuOpen = false;
+  }
+
+  // Optional: Helper method for keyboard accessibility
+  onKeydown(event: KeyboardEvent, action: () => void): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
   }
 }

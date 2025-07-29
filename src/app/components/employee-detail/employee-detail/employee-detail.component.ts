@@ -1,5 +1,4 @@
-// components/employee-detail/employee-detail.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
@@ -13,7 +12,12 @@ import { Employee } from '../../../models/employee.model';
   templateUrl: './employee-detail.component.html',
   styleUrls: ['./employee-detail.component.scss']
 })
-export class EmployeeDetailComponent implements OnInit, OnDestroy {
+export class EmployeeDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private employeeService = inject(EmployeeService);
+  private notificationService = inject(NotificationService);
+
   employee: Employee | null = null;
   isLoading = true;
   notFound = false;
@@ -61,13 +65,6 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
     { id: 'documents', label: 'Documents', shortLabel: 'Docs', icon: 'bi bi-file-earmark-text' }
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private employeeService: EmployeeService,
-    private notificationService: NotificationService
-  ) { }
-
   ngOnInit(): void {
     this.loadEmployee();
 
@@ -75,10 +72,6 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.animationState = 'enter';
     }, 100);
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup if needed
   }
 
   private loadEmployee(): void {
@@ -231,7 +224,7 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
   }
 
   getStatusBadgeClass(status: string): string {
-    const statusClasses: { [key: string]: string } = {
+    const statusClasses: Record<string, string> = {
       'Active': 'bg-success',
       'Inactive': 'bg-danger',
       'Pending': 'bg-warning text-dark',
@@ -241,7 +234,7 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
   }
 
   getStatusIcon(status: string): string {
-    const statusIcons: { [key: string]: string } = {
+    const statusIcons: Record<string, string> = {
       'Active': 'bi-check-circle-fill',
       'Inactive': 'bi-x-circle-fill',
       'Pending': 'bi-clock-fill',
@@ -251,7 +244,7 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
   }
 
   getDepartmentIcon(department: string): string {
-    const departmentIcons: { [key: string]: string } = {
+    const departmentIcons: Record<string, string> = {
       'Engineering': 'bi-gear-fill',
       'Marketing': 'bi-megaphone-fill',
       'Sales': 'bi-graph-up-arrow',
@@ -283,7 +276,7 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
 
   getPerformanceColor(): string {
     const performance = this.getPerformanceLevel();
-    const colors: { [key: string]: string } = {
+    const colors: Record<string, string> = {
       'Excellent': 'text-success',
       'Good': 'text-info',
       'Satisfactory': 'text-warning',
@@ -293,7 +286,7 @@ export class EmployeeDetailComponent implements OnInit, OnDestroy {
   }
 
   getActivityIcon(type: string): string {
-    const icons: { [key: string]: string } = {
+    const icons: Record<string, string> = {
       'info': 'bi-info-circle-fill text-info',
       'success': 'bi-check-circle-fill text-success',
       'warning': 'bi-exclamation-triangle-fill text-warning',

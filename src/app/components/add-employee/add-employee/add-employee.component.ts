@@ -1,7 +1,6 @@
-// components/add-employee/add-employee.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../services/employee.service';
@@ -19,7 +18,12 @@ import { Group } from '../../../models/employee.model';
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.scss']
 })
-export class AddEmployeeComponent implements OnInit, OnDestroy {
+export class AddEmployeeComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private employeeService = inject(EmployeeService);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+
   employeeForm!: FormGroup;
   groups: Group[] = [];
   filteredGroups: Group[] = [];
@@ -29,7 +33,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   isFormSubmitted = false;
 
   // Form validation states
-  fieldValidations: { [key: string]: boolean } = {};
+  fieldValidations: Record<string, boolean> = {};
 
   // Date constraints
   maxDate = new Date().toISOString().split('T')[0];
@@ -50,13 +54,6 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   // Animation state
   animationState = 'initial';
 
-  constructor(
-    private fb: FormBuilder,
-    private employeeService: EmployeeService,
-    private notificationService: NotificationService,
-    private router: Router
-  ) { }
-
   ngOnInit(): void {
     this.initializeForm();
     this.loadGroups();
@@ -66,10 +63,6 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.animationState = 'enter';
     }, 100);
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup if needed
   }
 
   private initializeForm(): void {
@@ -139,7 +132,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
     });
   }
 
-  private dateValidator(control: any): { [key: string]: any } | null {
+  private dateValidator(control: AbstractControl): ValidationErrors | null {
     if (control.value) {
       const inputDate = new Date(control.value);
       const today = new Date();
@@ -311,7 +304,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
             this.router.navigate(['/employees']);
           }, 2000);
 
-        } catch (error) {
+        } catch {
           this.animationState = 'error';
           this.isLoading = false;
 
@@ -410,7 +403,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   }
 
   private getFieldDisplayName(fieldName: string): string {
-    const displayNames: { [key: string]: string } = {
+    const displayNames: Record<string, string> = {
       username: 'Username',
       firstName: 'First Name',
       lastName: 'Last Name',
@@ -425,7 +418,7 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   }
 
   private getPatternErrorMessage(fieldName: string): string {
-    const patternMessages: { [key: string]: string } = {
+    const patternMessages: Record<string, string> = {
       username: 'Username can only contain letters, numbers, and underscores',
       firstName: 'First name can only contain letters and spaces',
       lastName: 'Last name can only contain letters and spaces',
@@ -444,8 +437,9 @@ export class AddEmployeeComponent implements OnInit, OnDestroy {
   }
 
   // Auto-format salary input
-  onSalaryInput(event: any): void {
-    let value = event.target.value.replace(/\D/g, '');
+  onSalaryInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    let value = target.value.replace(/\D/g, '');
     if (value) {
       // Remove leading zeros
       value = value.replace(/^0+/, '') || '0';

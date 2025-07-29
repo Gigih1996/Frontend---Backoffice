@@ -2,8 +2,9 @@
     <div *ngFor="let notification of notifications; trackBy: trackByNotificationId"
         [id]="'notification-' + notification.id" class="notification" [class]="getNotificationClass(notification.type)"
         [attr.aria-label]="getAriaLabel(notification)" [attr.aria-live]="getAriaLive(notification.type)"
-        (mouseenter)="pauseAutoRemoval(notification)" (mouseleave)="resumeAutoRemoval(notification)"
-        (click)="onNotificationClick(notification)" role="alert">
+        [attr.tabindex]="0" (mouseenter)="pauseAutoRemoval()" (mouseleave)="resumeAutoRemoval()"
+        (click)="onNotificationClick(notification)" (keydown)="onNotificationKeydown($event, notification)"
+        role="alert">
 
         <!-- Notification Content -->
         <div class="notification-content">
