@@ -1,0 +1,115 @@
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" *ngIf="isMobile && mobileMenuOpen" (click)="closeMobileMenu()">
+</div>
+
+<!-- Sidebar -->
+<nav class="sidebar" [class.collapsed]="collapsed && !isMobile" [class.mobile-open]="isMobile && mobileMenuOpen">
+
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <div class="brand-area">
+            <div class="brand-icon">
+                <i class="bi bi-building-fill"></i>
+            </div>
+            <div class="brand-text" *ngIf="!collapsed || isMobile">
+                <h5 class="brand-title mb-0">EmployeeHub</h5>
+                <small class="brand-subtitle">Management System</small>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="btn btn-sm sidebar-toggle" (click)="toggleSidebar()" *ngIf="isToggle"
+            [title]="collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
+            <i class="bi" [class.bi-chevron-left]="!collapsed && !isMobile"
+                [class.bi-chevron-right]="collapsed && !isMobile" [class.bi-x-lg]="isMobile">
+            </i>
+        </button>
+    </div>
+
+    <!-- User Profile Section -->
+    <div class="user-profile" *ngIf="!collapsed || isMobile">
+        <div class="user-avatar">
+            <div class="avatar-circle">
+                {{ userInfo.avatar }}
+            </div>
+            <div class="online-indicator"></div>
+        </div>
+        <div class="user-info">
+            <h6 class="user-name mb-0">{{ userInfo.name }}</h6>
+            <small class="user-email">{{ userInfo.email }}</small>
+        </div>
+    </div>
+
+    <!-- Collapsed User Profile -->
+    <div class="user-profile-collapsed" *ngIf="collapsed && !isMobile">
+        <div class="avatar-circle-small">
+            {{ userInfo.avatar }}
+        </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="sidebar-menu">
+        <ul class="nav flex-column">
+            <li class="nav-item" *ngFor="let item of menuItems">
+                <a class="nav-link" [class]="getMenuItemClass(item)" (click)="navigateTo(item.route)"
+                    [title]="collapsed && !isMobile ? item.title : ''">
+
+                    <div class="menu-icon">
+                        <i class="bi" [class]="item.icon"></i>
+                    </div>
+
+                    <span class="menu-title" *ngIf="!collapsed || isMobile">
+                        {{ item.title }}
+                    </span>
+
+                    <span class="badge bg-warning badge-pill ms-auto" *ngIf="item.badge && (!collapsed || isMobile)">
+                        {{ item.badge }}
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <!-- Version Info -->
+        <div class="version-info" *ngIf="!collapsed || isMobile">
+            <small>
+                <i class="bi bi-info-circle me-2"></i>
+                Version 1.0.0
+            </small>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="btn btn-outline-danger w-100 logout-btn" (click)="logout()"
+            [title]="collapsed && !isMobile ? 'Logout' : ''">
+            <i class="bi bi-box-arrow-right"></i>
+            <span *ngIf="!collapsed || isMobile" class="ms-2">Logout</span>
+        </button>
+    </div>
+
+    <!-- Quick Stats (when expanded) -->
+    <div class="quick-stats" *ngIf="!collapsed || isMobile">
+        <div class="stats-header">
+            <h6 class="mb-2">
+                <i class="bi bi-graph-up me-2"></i>
+                Quick Stats
+            </h6>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Employees</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Departments</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu Button (Fixed) -->
+<button class="btn btn-primary mobile-menu-btn d-lg-none" (click)="toggleSidebar()" *ngIf="!mobileMenuOpen">
+    <i class="bi bi-list"></i>
+</button>

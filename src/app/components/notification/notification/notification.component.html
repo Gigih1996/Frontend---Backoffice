@@ -1,0 +1,48 @@
+<div class="notification-container" role="region" aria-label="Notifications">
+    <div *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+        [id]="'notification-' + notification.id" class="notification" [class]="getNotificationClass(notification.type)"
+        [attr.aria-label]="getAriaLabel(notification)" [attr.aria-live]="getAriaLive(notification.type)"
+        (mouseenter)="pauseAutoRemoval(notification)" (mouseleave)="resumeAutoRemoval(notification)"
+        (click)="onNotificationClick(notification)" role="alert">
+
+        <!-- Notification Content -->
+        <div class="notification-content">
+
+            <!-- Icon -->
+            <div class="notification-icon">
+                <i class="bi" [class]="getNotificationIcon(notification.type)"></i>
+            </div>
+
+            <!-- Message Content -->
+            <div class="notification-message">
+                <div class="notification-title">
+                    {{ getNotificationTitle(notification.type) }}
+                </div>
+                <div class="notification-text">
+                    {{ notification.message }}
+                </div>
+            </div>
+
+            <!-- Progress Bar (if duration is set) -->
+            <div class="notification-progress" *ngIf="notification.duration"
+                [style.animation-duration.ms]="notification.duration"></div>
+
+        </div>
+
+        <!-- Close Button -->
+        <button class="notification-close" (click)="removeNotification(notification.id); $event.stopPropagation()"
+            [attr.aria-label]="'Close ' + getNotificationTitle(notification.type).toLowerCase() + ' notification'"
+            type="button">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+    </div>
+</div>
+
+<!-- Notification Counter (when there are many notifications) -->
+<div class="notification-counter" *ngIf="notifications.length > 3"
+    [attr.aria-label]="notifications.length + ' notifications'">
+    <span class="counter-badge">
+        {{ notifications.length }}
+    </span>
+</div>

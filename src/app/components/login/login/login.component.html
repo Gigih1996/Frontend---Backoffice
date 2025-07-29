@@ -1,0 +1,181 @@
+<div class="login-container">
+    <!-- Animated Background -->
+    <canvas id="particles-canvas" class="particles-canvas"></canvas>
+
+    <!-- Floating Shapes -->
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid h-100">
+        <div class="row h-100 align-items-center justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+
+                <!-- Login Card -->
+                <div class="login-card" [class]="'animation-' + animationState">
+
+                    <!-- Card Header -->
+                    <div class="card-header text-center">
+                        <div class="logo-container">
+                            <div class="logo-circle">
+                                <i class="bi bi-building-gear"></i>
+                            </div>
+                            <div class="logo-ripple"></div>
+                        </div>
+
+                        <h2 class="card-title mb-2">
+                            Welcome Back
+                        </h2>
+                        <p class="card-subtitle text-muted">
+                            Sign in to Employee Management System
+                        </p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div class="card-body">
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+                            <!-- Username Field -->
+                            <div class="mb-4">
+                                <label for="username" class="form-label">
+                                    <i class="bi bi-person-circle me-2"></i>
+                                    Username
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text" id="username" formControlName="username" class="form-control"
+                                        [class.is-invalid]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"
+                                        [class.is-valid]="loginForm.get('username')?.touched && loginForm.get('username')?.valid"
+                                        placeholder="Enter your username" autocomplete="username">
+                                </div>
+                                <div class="invalid-feedback" *ngIf="getFieldError('username')">
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                    {{ getFieldError('username') }}
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-shield-lock me-2"></i>
+                                    Password
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input [type]="showPassword ? 'text' : 'password'" id="password"
+                                        formControlName="password" class="form-control"
+                                        [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+                                        [class.is-valid]="loginForm.get('password')?.touched && loginForm.get('password')?.valid"
+                                        placeholder="Enter your password" autocomplete="current-password">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        (click)="togglePasswordVisibility()" tabindex="-1">
+                                        <i class="bi" [class.bi-eye]="!showPassword"
+                                            [class.bi-eye-slash]="showPassword"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback" *ngIf="getFieldError('password')">
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                    {{ getFieldError('password') }}
+                                </div>
+                            </div>
+
+                            <!-- Remember Me -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe"
+                                        formControlName="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">
+                                        Remember me for 30 days
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading"
+                                    [class.loading]="isLoading">
+                                    <span *ngIf="!isLoading" class="btn-content">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                                        Sign In
+                                    </span>
+                                    <span *ngIf="isLoading" class="btn-loading">
+                                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        Signing in...
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Demo Credentials Button -->
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-outline-info" (click)="fillDemoCredentials()"
+                                    [disabled]="isLoading">
+                                    <i class="bi bi-magic me-2"></i>
+                                    Use Demo Credentials
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="card-footer text-center">
+                        <div class="demo-info">
+                            <h6 class="mb-2">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Demo Account
+                            </h6>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">
+                                        <strong>Username:</strong><br>
+                                        <code>admin</code>
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">
+                                        <strong>Password:</strong><br>
+                                        <code>password123</code>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Additional Info -->
+                <div class="text-center mt-4">
+                    <p class="text-muted small">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Secure Employee Management System
+                    </p>
+                    <p class="text-muted small">
+                        Built with Angular 19 & Bootstrap 5.3
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Animation Overlay -->
+    <div class="success-overlay" *ngIf="animationState === 'success'">
+        <div class="success-animation">
+            <div class="checkmark-circle">
+                <div class="checkmark"></div>
+            </div>
+            <h3 class="success-text">Welcome Back!</h3>
+            <p class="success-subtext">Redirecting to dashboard...</p>
+        </div>
+    </div>
+
+</div>

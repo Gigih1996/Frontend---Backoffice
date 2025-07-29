@@ -1,0 +1,458 @@
+<div class="add-employee-page" [class]="'animation-' + animationState">
+    <div class="container py-4">
+
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="page-header glass-card p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-2">
+                                    <li class="breadcrumb-item">
+                                        <a (click)="onCancel()" class="text-decoration-none">
+                                            <i class="bi bi-people-fill me-1"></i>Employees
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Add New Employee</li>
+                                </ol>
+                            </nav>
+
+                            <h1 class="page-title mb-2">
+                                <i class="bi bi-person-plus-fill me-3"></i>
+                                Add New Employee
+                            </h1>
+                            <p class="page-subtitle text-muted mb-0">
+                                Fill in the employee information below
+                            </p>
+                        </div>
+
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <div class="progress-info">
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar bg-gradient" [style.width.%]="getFormProgress()"
+                                        role="progressbar"></div>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    {{ getFormProgress() }}% Complete
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step Progress -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="step-progress glass-card p-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="steps d-flex justify-content-between align-items-center">
+
+                                <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1"
+                                    (click)="goToStep(1)">
+                                    <div class="step-icon">
+                                        <i class="bi bi-person-fill" *ngIf="currentStep <= 1"></i>
+                                        <i class="bi bi-check-lg" *ngIf="currentStep > 1"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h6 class="step-title">Personal Info</h6>
+                                        <small class="step-description">Basic details</small>
+                                    </div>
+                                </div>
+
+                                <div class="step-connector" [class.active]="currentStep > 1"></div>
+
+                                <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2"
+                                    (click)="goToStep(2)">
+                                    <div class="step-icon">
+                                        <i class="bi bi-briefcase-fill" *ngIf="currentStep <= 2"></i>
+                                        <i class="bi bi-check-lg" *ngIf="currentStep > 2"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h6 class="step-title">Work Info</h6>
+                                        <small class="step-description">Job details</small>
+                                    </div>
+                                </div>
+
+                                <div class="step-connector" [class.active]="currentStep > 2"></div>
+
+                                <div class="step" [class.active]="currentStep >= 3" [class.completed]="currentStep > 3"
+                                    (click)="goToStep(3)">
+                                    <div class="step-icon">
+                                        <i class="bi bi-card-text" *ngIf="currentStep <= 3"></i>
+                                        <i class="bi bi-check-lg" *ngIf="currentStep > 3"></i>
+                                    </div>
+                                    <div class="step-content">
+                                        <h6 class="step-title">Additional</h6>
+                                        <small class="step-description">Description</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="row">
+            <div class="col-12">
+                <div class="form-container glass-card">
+
+                    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" novalidate>
+
+                        <!-- Step 1: Personal Information -->
+                        <div class="form-step" *ngIf="currentStep === 1">
+                            <div class="step-header p-4 border-bottom">
+                                <h4 class="step-title mb-2">
+                                    <i class="bi bi-person-circle me-3"></i>
+                                    Personal Information
+                                </h4>
+                                <p class="step-description text-muted mb-0">
+                                    Enter the employee's basic personal details
+                                </p>
+                            </div>
+
+                            <div class="step-content p-4">
+                                <div class="row g-4">
+
+                                    <!-- Username -->
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label required">
+                                            <i class="bi bi-at me-2"></i>Username
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-person"></i>
+                                            </span>
+                                            <input type="text" id="username" formControlName="username"
+                                                class="form-control"
+                                                [class.is-invalid]="employeeForm.get('username')?.touched && employeeForm.get('username')?.invalid"
+                                                [class.is-valid]="employeeForm.get('username')?.touched && employeeForm.get('username')?.valid"
+                                                placeholder="Enter username">
+                                        </div>
+                                        <div class="invalid-feedback" *ngIf="getFieldError('username')">
+                                            {{ getFieldError('username') }}
+                                        </div>
+                                        <div class="form-text">
+                                            Only letters, numbers, and underscores allowed
+                                        </div>
+                                    </div>
+
+                                    <!-- First Name -->
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label required">
+                                            <i class="bi bi-person-badge me-2"></i>First Name
+                                        </label>
+                                        <input type="text" id="firstName" formControlName="firstName"
+                                            class="form-control"
+                                            [class.is-invalid]="employeeForm.get('firstName')?.touched && employeeForm.get('firstName')?.invalid"
+                                            [class.is-valid]="employeeForm.get('firstName')?.touched && employeeForm.get('firstName')?.valid"
+                                            placeholder="Enter first name">
+                                        <div class="invalid-feedback" *ngIf="getFieldError('firstName')">
+                                            {{ getFieldError('firstName') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label required">
+                                            <i class="bi bi-person-badge-fill me-2"></i>Last Name
+                                        </label>
+                                        <input type="text" id="lastName" formControlName="lastName" class="form-control"
+                                            [class.is-invalid]="employeeForm.get('lastName')?.touched && employeeForm.get('lastName')?.invalid"
+                                            [class.is-valid]="employeeForm.get('lastName')?.touched && employeeForm.get('lastName')?.valid"
+                                            placeholder="Enter last name">
+                                        <div class="invalid-feedback" *ngIf="getFieldError('lastName')">
+                                            {{ getFieldError('lastName') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label required">
+                                            <i class="bi bi-envelope me-2"></i>Email Address
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-envelope"></i>
+                                            </span>
+                                            <input type="email" id="email" formControlName="email" class="form-control"
+                                                [class.is-invalid]="employeeForm.get('email')?.touched && employeeForm.get('email')?.invalid"
+                                                [class.is-valid]="employeeForm.get('email')?.touched && employeeForm.get('email')?.valid"
+                                                placeholder="Enter email address">
+                                        </div>
+                                        <div class="invalid-feedback" *ngIf="getFieldError('email')">
+                                            {{ getFieldError('email') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Birth Date -->
+                                    <div class="col-md-6">
+                                        <label for="birthDate" class="form-label required">
+                                            <i class="bi bi-calendar me-2"></i>Birth Date
+                                        </label>
+                                        <input type="date" id="birthDate" formControlName="birthDate"
+                                            class="form-control"
+                                            [class.is-invalid]="employeeForm.get('birthDate')?.touched && employeeForm.get('birthDate')?.invalid"
+                                            [class.is-valid]="employeeForm.get('birthDate')?.touched && employeeForm.get('birthDate')?.valid"
+                                            [max]="maxDate" [min]="minDate">
+                                        <div class="invalid-feedback" *ngIf="getFieldError('birthDate')">
+                                            {{ getFieldError('birthDate') }}
+                                        </div>
+                                        <div class="form-text">
+                                            Employee must be at least 17 years old
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Work Information -->
+                        <div class="form-step" *ngIf="currentStep === 2">
+                            <div class="step-header p-4 border-bottom">
+                                <h4 class="step-title mb-2">
+                                    <i class="bi bi-briefcase me-3"></i>
+                                    Work Information
+                                </h4>
+                                <p class="step-description text-muted mb-0">
+                                    Configure employment details and compensation
+                                </p>
+                            </div>
+
+                            <div class="step-content p-4">
+                                <div class="row g-4">
+
+                                    <!-- Basic Salary -->
+                                    <div class="col-md-6">
+                                        <label for="basicSalary" class="form-label required">
+                                            <i class="bi bi-currency-dollar me-2"></i>Basic Salary (IDR)
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="text" id="basicSalary" formControlName="basicSalary"
+                                                class="form-control"
+                                                [class.is-invalid]="employeeForm.get('basicSalary')?.touched && employeeForm.get('basicSalary')?.invalid"
+                                                [class.is-valid]="employeeForm.get('basicSalary')?.touched && employeeForm.get('basicSalary')?.valid"
+                                                placeholder="Enter salary amount" (input)="onSalaryInput($event)">
+                                        </div>
+                                        <div class="invalid-feedback" *ngIf="getFieldError('basicSalary')">
+                                            {{ getFieldError('basicSalary') }}
+                                        </div>
+                                        <div class="form-text" *ngIf="getFormattedSalary()">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            {{ getFormattedSalary() }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="col-md-6">
+                                        <label for="status" class="form-label required">
+                                            <i class="bi bi-flag me-2"></i>Employment Status
+                                        </label>
+                                        <select id="status" formControlName="status" class="form-select"
+                                            [class.is-invalid]="employeeForm.get('status')?.touched && employeeForm.get('status')?.invalid"
+                                            [class.is-valid]="employeeForm.get('status')?.touched && employeeForm.get('status')?.valid">
+                                            <option *ngFor="let status of statusOptions" [value]="status.value">
+                                                {{ status.label }}
+                                            </option>
+                                        </select>
+                                        <div class="invalid-feedback" *ngIf="getFieldError('status')">
+                                            {{ getFieldError('status') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Department/Group -->
+                                    <div class="col-12">
+                                        <label for="group" class="form-label required">
+                                            <i class="bi bi-building me-2"></i>Department
+                                        </label>
+                                        <div class="group-dropdown-container position-relative">
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-building"></i>
+                                                </span>
+                                                <input type="text" id="groupSearch" [(ngModel)]="groupSearchTerm"
+                                                    (input)="onGroupSearch()" (focus)="toggleGroupDropdown()"
+                                                    (blur)="closeGroupDropdown()" class="form-control"
+                                                    [class.is-invalid]="employeeForm.get('group')?.touched && employeeForm.get('group')?.invalid"
+                                                    [class.is-valid]="employeeForm.get('group')?.touched && employeeForm.get('group')?.valid"
+                                                    placeholder="Search and select department..."
+                                                    [ngModelOptions]="{standalone: true}" autocomplete="off">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    (click)="toggleGroupDropdown()">
+                                                    <i class="bi" [class.bi-chevron-down]="!isGroupDropdownOpen"
+                                                        [class.bi-chevron-up]="isGroupDropdownOpen"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Dropdown Menu -->
+                                            <div class="group-dropdown" *ngIf="isGroupDropdownOpen">
+                                                <div *ngFor="let group of filteredGroups" class="group-option"
+                                                    (mousedown)="selectGroup(group)">
+                                                    <i class="bi bi-building me-2"></i>
+                                                    {{ group.name }}
+                                                </div>
+                                                <div class="no-groups" *ngIf="filteredGroups.length === 0">
+                                                    <i class="bi bi-search me-2"></i>
+                                                    No departments found
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="invalid-feedback" *ngIf="getFieldError('group')">
+                                            {{ getFieldError('group') }}
+                                        </div>
+                                        <div class="form-text">
+                                            Type to search or click the dropdown button
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Additional Information -->
+                        <div class="form-step" *ngIf="currentStep === 3">
+                            <div class="step-header p-4 border-bottom">
+                                <h4 class="step-title mb-2">
+                                    <i class="bi bi-card-text me-3"></i>
+                                    Additional Information
+                                </h4>
+                                <p class="step-description text-muted mb-0">
+                                    Provide additional details about the employee
+                                </p>
+                            </div>
+
+                            <div class="step-content p-4">
+                                <div class="row">
+
+                                    <!-- Description -->
+                                    <div class="col-12">
+                                        <label for="description" class="form-label required">
+                                            <i class="bi bi-journal-text me-2"></i>Description
+                                        </label>
+                                        <textarea id="description" formControlName="description" class="form-control"
+                                            [class.is-invalid]="employeeForm.get('description')?.touched && employeeForm.get('description')?.invalid"
+                                            [class.is-valid]="employeeForm.get('description')?.touched && employeeForm.get('description')?.valid"
+                                            placeholder="Enter employee description, role responsibilities, or additional notes..."
+                                            rows="6"></textarea>
+                                        <div class="invalid-feedback" *ngIf="getFieldError('description')">
+                                            {{ getFieldError('description') }}
+                                        </div>
+                                        <div class="form-text">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            Minimum 10 characters, maximum 500 characters
+                                            <span class="float-end">
+                                                {{ employeeForm.get('description')?.value?.length || 0 }}/500
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Summary -->
+                                    <div class="col-12 mt-4">
+                                        <div class="form-summary p-4 bg-light rounded-3">
+                                            <h6 class="mb-3">
+                                                <i class="bi bi-clipboard-check me-2"></i>
+                                                Review Information
+                                            </h6>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <small class="text-muted d-block">Full Name</small>
+                                                    <strong>
+                                                        {{ employeeForm.get('firstName')?.value }} {{
+                                                        employeeForm.get('lastName')?.value }}
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <small class="text-muted d-block">Email</small>
+                                                    <strong>{{ employeeForm.get('email')?.value }}</strong>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <small class="text-muted d-block">Department</small>
+                                                    <strong>{{ employeeForm.get('group')?.value }}</strong>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <small class="text-muted d-block">Salary</small>
+                                                    <strong class="text-success">{{ getFormattedSalary() }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions p-4 border-top">
+                            <div class="row align-items-center">
+
+                                <div class="col-md-6">
+                                    <div class="step-navigation">
+                                        <button type="button" class="btn btn-outline-secondary me-2"
+                                            (click)="prevStep()" [disabled]="currentStep === 1 || isLoading">
+                                            <i class="bi bi-arrow-left me-2"></i>Previous
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary" (click)="nextStep()"
+                                            *ngIf="currentStep < totalSteps" [disabled]="isLoading">
+                                            Next<i class="bi bi-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn btn-outline-danger me-2" (click)="onCancel()"
+                                            [disabled]="isLoading">
+                                            <i class="bi bi-x-circle me-2"></i>Cancel
+                                        </button>
+
+                                        <button type="submit" class="btn btn-success btn-lg"
+                                            [disabled]="isLoading || employeeForm.invalid"
+                                            *ngIf="currentStep === totalSteps">
+                                            <span *ngIf="!isLoading">
+                                                <i class="bi bi-check-circle me-2"></i>Save Employee
+                                            </span>
+                                            <span *ngIf="isLoading">
+                                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                                Saving...
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-overlay" *ngIf="animationState === 'success'">
+        <div class="success-animation">
+            <div class="checkmark-container">
+                <div class="checkmark-circle">
+                    <div class="checkmark"></div>
+                </div>
+            </div>
+            <h3 class="success-title">Employee Added Successfully!</h3>
+            <p class="success-message">Redirecting to employee list...</p>
+            <div class="spinner-border text-light mt-3"></div>
+        </div>
+    </div>
+
+</div>

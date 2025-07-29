@@ -1,0 +1,539 @@
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 420px;
+    width: 100%;
+    pointer-events: none;
+
+    @media (max-width: 768px) {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    @media (max-width: 576px) {
+        top: 5px;
+        right: 5px;
+        left: 5px;
+    }
+}
+
+.notification {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: auto;
+    position: relative;
+    max-width: 100%;
+
+    // Entrance animation
+    &.notification-enter {
+        transform: translateX(0);
+        opacity: 1;
+        animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    // Exit animation
+    &.notification-exit {
+        animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    &:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    // Notification types
+    &.notification-success {
+        border-left: 6px solid #28a745;
+
+        .notification-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+
+            i {
+                color: white;
+            }
+        }
+
+        .notification-progress {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+    }
+
+    &.notification-error {
+        border-left: 6px solid #dc3545;
+
+        .notification-icon {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+
+            i {
+                color: white;
+            }
+        }
+
+        .notification-progress {
+            background: linear-gradient(90deg, #dc3545, #e74c3c);
+        }
+    }
+
+    &.notification-warning {
+        border-left: 6px solid #ffc107;
+
+        .notification-icon {
+            background: linear-gradient(135deg, #ffc107, #ffca2c);
+
+            i {
+                color: #212529;
+            }
+        }
+
+        .notification-progress {
+            background: linear-gradient(90deg, #ffc107, #ffca2c);
+        }
+    }
+
+    &.notification-info {
+        border-left: 6px solid #17a2b8;
+
+        .notification-icon {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
+
+            i {
+                color: white;
+            }
+        }
+
+        .notification-progress {
+            background: linear-gradient(90deg, #17a2b8, #20c997);
+        }
+    }
+
+    .notification-content {
+        display: flex;
+        align-items: flex-start;
+        padding: 1.25rem 1rem 1.25rem 1.25rem;
+        position: relative;
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+
+            i {
+                font-size: 1.5rem;
+                filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+            }
+
+            // Icon animations
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 12px;
+                background: inherit;
+                opacity: 0;
+                transform: scale(1.2);
+                animation: iconPulse 2s infinite;
+            }
+
+            @media (max-width: 576px) {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                margin-right: 0.75rem;
+
+                i {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+
+        .notification-message {
+            flex: 1;
+            min-width: 0;
+
+            .notification-title {
+                font-size: 1rem;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 0.25rem;
+                line-height: 1.3;
+
+                @media (max-width: 576px) {
+                    font-size: 0.9rem;
+                }
+            }
+
+            .notification-text {
+                font-size: 0.9rem;
+                color: #495057;
+                line-height: 1.5;
+                word-wrap: break-word;
+
+                @media (max-width: 576px) {
+                    font-size: 0.85rem;
+                }
+            }
+        }
+
+        // Progress bar for timed notifications
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            border-radius: 0 0 16px 16px;
+            transform-origin: left;
+            animation: progressShrink linear;
+        }
+
+        @media (max-width: 576px) {
+            padding: 1rem 0.75rem 1rem 1rem;
+        }
+    }
+
+    .notification-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(108, 117, 125, 0.1);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #6c757d;
+
+        &:hover {
+            background: rgba(108, 117, 125, 0.2);
+            color: #495057;
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        i {
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 576px) {
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 28px;
+            height: 28px;
+
+            i {
+                font-size: 0.75rem;
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 12px;
+        margin: 0 0.25rem;
+    }
+}
+
+// Notification Counter
+.notification-counter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    pointer-events: none;
+    animation: counterBounce 0.4s ease-out;
+
+    .counter-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #dc3545, #e74c3c);
+        color: white;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        padding: 0 0.5rem;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        border: 2px solid white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        top: 10px;
+        right: 10px;
+
+        .counter-badge {
+            min-width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+            border-radius: 14px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        top: 5px;
+        right: 5px;
+
+        .counter-badge {
+            min-width: 24px;
+            height: 24px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+        }
+    }
+}
+
+// Animations
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+        max-height: 200px;
+        margin-bottom: 0.75rem;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes progressShrink {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes counterBounce {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+    .notification {
+        transition: none;
+        animation: none;
+
+        &.notification-enter {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        &.notification-exit {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        &:hover {
+            transform: none;
+        }
+
+        .notification-content .notification-icon::after {
+            animation: none;
+        }
+    }
+
+    .notification-counter {
+        animation: none;
+    }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+    .notification {
+        background: white;
+        border: 2px solid #000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+        &.notification-success {
+            border-left-color: #0f5132;
+        }
+
+        &.notification-error {
+            border-left-color: #721c24;
+        }
+
+        &.notification-warning {
+            border-left-color: #664d03;
+        }
+
+        &.notification-info {
+            border-left-color: #055160;
+        }
+
+        .notification-close {
+            background: #f8f9fa;
+            border: 1px solid #000;
+            color: #000;
+
+            &:hover {
+                background: #e9ecef;
+            }
+        }
+    }
+}
+
+// Focus styles for accessibility
+.notification-close:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+// Print styles
+@media print {
+
+    .notification-container,
+    .notification-counter {
+        display: none;
+    }
+}
+
+// RTL support
+[dir="rtl"] {
+    .notification-container {
+        left: 20px;
+        right: auto;
+
+        @media (max-width: 768px) {
+            left: 10px;
+            right: 10px;
+        }
+    }
+
+    .notification {
+        transform: translateX(-100%);
+
+        &.notification-enter {
+            animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        &.notification-exit {
+            animation: slideOutLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .notification-close {
+            left: 0.75rem;
+            right: auto;
+
+            @media (max-width: 576px) {
+                left: 0.5rem;
+            }
+        }
+    }
+
+    .notification-counter {
+        left: 20px;
+        right: auto;
+
+        @media (max-width: 768px) {
+            left: 10px;
+        }
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+        max-height: 200px;
+        margin-bottom: 0.75rem;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
